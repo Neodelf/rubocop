@@ -9,15 +9,15 @@ module RuboCop
         MSG = 'Prefer the new style validations `%s` over `%s`.'.freeze
 
         BLACKLIST = [:validates_acceptance_of,
-                     :validates_confirmation_of,
-                     :validates_exclusion_of,
-                     :validates_format_of,
-                     :validates_inclusion_of,
-                     :validates_length_of,
-                     :validates_numericality_of,
-                     :validates_presence_of,
-                     :validates_size_of,
-                     :validates_uniqueness_of].freeze
+          :validates_confirmation_of,
+          :validates_exclusion_of,
+          :validates_format_of,
+          :validates_inclusion_of,
+          :validates_length_of,
+          :validates_numericality_of,
+          :validates_presence_of,
+          :validates_size_of,
+          :validates_uniqueness_of].freeze
 
         WHITELIST = [
           'validates :column, acceptance: value',
@@ -37,16 +37,32 @@ module RuboCop
           return unless receiver.nil? && BLACKLIST.include?(method_name)
 
           add_offense(node,
-                      :selector,
-                      format(MSG,
-                             preferred_method(method_name),
-                             method_name))
+            :selector,
+            format(MSG,
+              preferred_method(method_name),
+              method_name))
         end
 
         private
 
         def preferred_method(method)
           WHITELIST[BLACKLIST.index(method.to_sym)]
+        end
+
+        def autocorrect(node)
+          _receiver, method_name, *args = *node
+          options = args.delete_if { |arg| arg.type == :sym }.first
+          lambda do |corrector|
+            validate_parameter = method_name.to_s.split('_')[1]
+            corrector.replace(node.loc.selector, 'validates')
+            if options
+              corrector.replace(options.loc.expression,
+                "#{validate_parameter}: { #{options.source} }")
+            else
+              corrector.insert_after(node.loc.expression,
+                ", #{validate_parameter}: true")
+            end
+          end
         end
       end
     end

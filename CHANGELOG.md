@@ -19,6 +19,7 @@
 * [#3052](https://github.com/bbatsov/rubocop/pull/3052): `Style/MultilineMethodDefinitionBraceLayout` enforced style supports `same_line` option. ([@panthomakos][])
 * [#3019](https://github.com/bbatsov/rubocop/issues/3019): Add new `Style/EmptyCaseCondition` cop. ([@owst][])
 * [#3072](https://github.com/bbatsov/rubocop/pull/3072): Add new `Lint/UselessArraySplat` cop. ([@owst][])
+* [#2927](https://github.com/bbatsov/rubocop/issues/2927): Add autocorrect for Rails/Validation cop. ([@neodelf][])
 
 ### Bug fixes
 
@@ -2129,3 +2130,4 @@
 [@jastkand]: https://github.com/jastkand
 [@graemeboy]: https://github.com/graemeboy
 [@akihiro17]: https://github.com/akihiro17
+[@neodelf]: https://github.com/neodelf

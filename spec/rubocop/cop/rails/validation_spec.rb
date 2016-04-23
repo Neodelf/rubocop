@@ -26,4 +26,18 @@ describe RuboCop::Cop::Rails::Validation do
                    'validates :name')
     expect(cop.offenses).to be_empty
   end
+
+  it 'autocorrect validates_presence_of' do
+    new_source = autocorrect_source(cop,
+      'validates_presence_of :full_name, :birth_date')
+    expect(new_source).to eq(
+      'validates :full_name, :birth_date, presence: true')
+  end
+
+  it 'autocorrect validates_length_of' do
+    new_source = autocorrect_source(cop,
+      'validates_numericality_of :age, minimum: 0, maximum: 122')
+    expect(new_source).to eq(
+      'validates :age, numericality: { minimum: 0, maximum: 122 }')
+  end
 end
